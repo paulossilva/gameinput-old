@@ -1,0 +1,93 @@
+====================================
+Reading joystick settings (REG 0x05)
+====================================
+
+DRIVER 00, 1 TO %j[, %k]
+
+Returns which joystick/keyboard settings are defined for left and right joystick ports.
+First return value holds left joystick (Joystick 1) selection and the second one, the right joystick selection (Joystick 2). 
+
+Joystick/Keyboard settings can be one of the following:
+
+1 - Sinclair 2 (67890)
+2 - Kempston 2
+3 - Kempston 1
+4 - Megadrive 1
+5 - Cursor
+6 - Megadrive 2
+7 - Sinclair 1 (12345)
+
+=====================================
+Defining joystick settings (REG 0x05)
+=====================================
+
+DRIVER 00, x, y
+
+Changes machine's REG 0x05 settings for left/right joystick ports.
+
+where x means:
+
+2 - left joystick port (Joystick 1)
+3 - right joystick port (Joystick 2)
+
+and y is one the listed joystick/keyboard settings:
+
+1 - Sinclair 2 (67890)
+2 - Kempston 2
+3 - Kempston 1
+4 - Megadrive 1
+5 - Cursor
+6 - Megadrive 2
+7 - Sinclair 1 (12345)
+
+===========================
+Reading input from Joystick
+===========================
+
+Reads a joystick port considering joystick/keyboard selection currently in place.
+
+DRIVER 00, x TO %j
+
+where x can be:
+
+4 - reads left joystick port (Joystick 1)
+5 - reads right joystick port (Joystick 2)
+
+Regardless the joystick selection, values returned by the driver are consistent and independent from the device interface, where each bit indicates a direction/button state.
+
+Bit   Direction/Button
+ 0  -     RIGHT
+ 1  -     LEFT
+ 2  -     DOWN
+ 3  -      UP
+ 4  -     FIRE 1
+ 5  -     FIRE 2
+ 6  -     FIRE 3 (Megadrive only)
+ 7  -     START  (Megadrive only) 
+
+A bit is set (1) when the corresponding direction/button is activated/pressed.
+
+Note: When reading the left joystick port (Joystick 1), the driver also reads input from the custom keyboard mapping (which defaults to the QAOP standard).
+
+============================
+Changing the custom keyboard 
+============================
+
+There is a default custom keyboard which provides the very commom layout QAOP (with SPACE as FIRE 1 and M as FIRE 2).
+It is possible to change these keyboard mappings to suit any preferences.
+
+DRIVER 00, 6, x, y
+
+where x can be:
+
+0 - UP key
+1 - DOWN key
+2 - LEFT key
+3 - RIGHT key
+4 - FIRE 1 key
+5 - FIRE 2 key
+
+and y is the char code for the key to be mapped.
+
+Note: Changes to custom keyboard mapping are in affect until the driver is uninstalled or the Next is rebooted.
+
